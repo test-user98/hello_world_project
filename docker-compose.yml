@@ -1,0 +1,33 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_DB=hello_world_db
+      - POSTGRES_USER=hello_world_user
+      - POSTGRES_PASSWORD=hello_world_password
+    depends_on:
+      - db
+      - redis
+
+  db:  # PostgreSQL service
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=hello_world_db
+      - POSTGRES_USER=hello_world_user
+      - POSTGRES_PASSWORD=hello_world_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+
+volumes:
+  postgres_data:
+
